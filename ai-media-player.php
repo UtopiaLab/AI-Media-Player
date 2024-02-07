@@ -2,7 +2,7 @@
 /*
 Plugin Name: AI Media Player
 Description: Media player for Loudmusic AI audio generation playbacks.
-Version: 1.0.0
+Version: 1.0.1
 Author: Umayanga Madushan
 Author URI: https://facebook/umayangalk
 License: GPL-2.0+
@@ -24,7 +24,23 @@ function ai_audio_player_enqueue_scripts() {
 }
 add_action('wp_enqueue_scripts', 'ai_audio_player_enqueue_scripts');
 
-function ai_audio_player_function() {
+function ai_audio_player_function($atts) {
+
+    $atts = shortcode_atts(
+        array(
+            'src' => '', // Default source is empty
+        ),
+        $atts,
+        'ai-audio-player'
+    );
+
+    // Check if the 'src' attribute is provided
+    if (empty($atts['src'])) {
+        return 'Error: Missing audio source.';
+    }
+
+
+    ob_start();
     ?>
     
     <link
@@ -35,12 +51,12 @@ function ai_audio_player_function() {
   href="https://fonts.googleapis.com/css?family=Fjalla+One&display=swap"
   rel="stylesheet"
 />
-<div class="container">
+<div class="player-container">
   <div class="bubble pink-bubble"></div>
   <div class="bubble blue-bubble"></div>
   <div class="bubble small-p-bubble"></div>
   <div class="bubble small-b-bubble"></div>
-  <div class="wrapper">
+  <div class="player-wrapper">
     <div class="app-ui right-ui">
       <div class="play-action">
         <div class="half-arrow">
@@ -147,11 +163,11 @@ function ai_audio_player_function() {
         <div class="lines grey"></div>
        </div>
           <div class="second">
-            <div class="listened">0:39</div>
+            <div class="listened">0:00</div>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 477.88 477.88">
   <path fill="#063064" d="M468.46 1.8a17.06 17.06 0 00-15.3 0L9.44 223.69a17.07 17.07 0 004.58 32.05l176.1 32.03 32.04 176.11a17.07 17.07 0 0032.05 4.58L476.07 24.7a17.07 17.07 0 00-7.61-22.9z" class="active-path" data-old_color="#000000" data-original="#000000"/>
 </svg>
-            <div class="listen">6:28</div>
+            <div class="listen">0:00</div>
           </div>
        <div class="left-bar-wrapper">
          <svg class="addTo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
@@ -172,11 +188,12 @@ function ai_audio_player_function() {
 </div>
 
 <audio style="display: none;" controls id="audio">
-  <source src="https://apperal.test/wp-content/uploads/2024/02/Sanjula-Himala-Ft-Kaizer-Kaiz-Gata-Dodam-Ananmanan.lk_.mp3" type="audio/ogg">
+  <source src="<?php echo esc_url($atts['src']); ?>" type="audio/ogg">
 Your browser does not support the audio element.
 </audio>
 
     <?php
+    return ob_get_clean();
 }
 
 add_shortcode('ai-audio-player', 'ai_audio_player_function');

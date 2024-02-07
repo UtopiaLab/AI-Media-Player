@@ -27,7 +27,7 @@ body {
     background-color: #f4f4f4;
 }
 
-.container {
+.player-container {
     background-color: #f3fcfd;
     width: 600px;
     height: 600px;
@@ -86,7 +86,7 @@ body {
     box-shadow: 2px 14px 40px -20px rgba(0, 0, 0, 0.2);
 }
 
-.wrapper {
+.player-wrapper {
     padding: 20px;
 }
 
